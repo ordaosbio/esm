@@ -4,19 +4,20 @@
 # LICENSE file in the root directory of this source tree.
 
 from pathlib import Path
+from typing import Literal
 
 import torch
 
 from esm.esmfold.v1.esmfold import ESMFold
 
 
-def _load_model(model_name):
+def _load_model(model_name, device: Literal['cpu', 'cuda'] = 'cuda') -> ESMFold:
     if model_name.endswith(".pt"):  # local, treat as filepath
         model_path = Path(model_name)
-        model_data = torch.load(str(model_path), map_location="cpu")
+        model_data = torch.load(str(model_path), map_location=device)
     else:  # load from hub
         url = f"https://dl.fbaipublicfiles.com/fair-esm/models/{model_name}.pt"
-        model_data = torch.hub.load_state_dict_from_url(url, progress=False, map_location="cpu")
+        model_data = torch.hub.load_state_dict_from_url(url, progress=False, map_location=device)
 
     cfg = model_data["cfg"]["model"]
     model_state = model_data["model"]
@@ -48,7 +49,7 @@ def esmfold_v0():
     return _load_model("esmfold_3B_v0")
 
 
-def esmfold_v1():
+def esmfold_v1(device: Literal['cpu', 'cuda'] = 'cuda'):
     """
     ESMFold v1 model using 3B ESM-2, 48 folding blocks.
     ESMFold provides fast high accuracy atomic level structure prediction
@@ -56,7 +57,7 @@ def esmfold_v1():
     protein language model to extract meaningful representations from the
     protein sequence.
     """
-    return _load_model("esmfold_3B_v1")
+    return _load_model("esmfold_3B_v1", device=device)
 
 
 def esmfold_structure_module_only_8M():

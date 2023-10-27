@@ -8,6 +8,7 @@ import urllib
 import warnings
 from argparse import Namespace
 from pathlib import Path
+from typing import Literal
 
 import torch
 
@@ -408,7 +409,7 @@ def esmfold_v0():
     return esm.esmfold.v1.pretrained.esmfold_v0()
 
 
-def esmfold_v1():
+def esmfold_v1(device: Literal['cpu', 'cuda'] = 'cuda'):
     """
     ESMFold v1 model using 3B ESM-2, 48 folding blocks.
     ESMFold provides fast high accuracy atomic level structure prediction
@@ -417,7 +418,7 @@ def esmfold_v1():
     protein sequence.
     """
     import esm.esmfold.v1.pretrained
-    return esm.esmfold.v1.pretrained.esmfold_v1()
+    return esm.esmfold.v1.pretrained.esmfold_v1(device=device)
 
 def esmfold_structure_module_only_8M():
     """
