@@ -32,17 +32,17 @@ def _load_model(model_name, device: Literal['cpu', 'cuda'] = 'cuda') -> ESMFold:
             missing_essential_keys.append(missing_key)
 
     # HACK
-    print('Are you there? Can you hear me?')
-    print(missing_essential_keys)
     trunk_keys = ['trunk.structure_module.ipa.linear_q_points.linear.weight', 
                   'trunk.structure_module.ipa.linear_kv_points.linear.bias', 
                   'trunk.structure_module.ipa.linear_kv_points.linear.weight', 
                   'trunk.structure_module.ipa.linear_q_points.linear.bias']
     for k in missing_essential_keys:
+        print(k, k.replace('linear.',''))
         if k in trunk_keys:
             model_state[k] = model_state[k.replace('linear.','')]
             del model_state[k.replace('linear.','')]
             missing_essential_keys.remove(k)
+        print(missing_essential_keys)
     
     if missing_essential_keys:
         raise RuntimeError(f"Keys '{', '.join(missing_essential_keys)}' are missing.")
