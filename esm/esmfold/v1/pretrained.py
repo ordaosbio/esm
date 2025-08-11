@@ -32,6 +32,8 @@ def _load_model(model_name, device: Literal['cpu', 'cuda'] = 'cuda') -> ESMFold:
             missing_essential_keys.append(missing_key)
 
     # HACK
+    print('Are you there? Can you hear me?')
+    print(missing_essential_keys)
     trunk_keys = ['trunk.structure_module.ipa.linear_q_points.linear.weight', 
                   'trunk.structure_module.ipa.linear_kv_points.linear.bias', 
                   'trunk.structure_module.ipa.linear_kv_points.linear.weight', 
